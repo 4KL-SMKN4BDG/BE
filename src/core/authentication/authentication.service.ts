@@ -16,10 +16,8 @@ class AuthenticationService extends BaseService {
   }
   login = async (payload: any) => {
     const user: User | null = await this.db.user.findUnique({ where: { email: payload.email }});
-    console.log("user :", user?.password);
-    console.log("payload: ", payload.password)
     if (!user) throw new NotFound('Email not registered');
-    if (!compare(payload.password, user?.password)) throw new BadRequest('Invalid password');
+    if (!await compare(payload.password, user?.password)) throw new BadRequest('Invalid password');
 
     const accessToken = await generateAccessToken(user);
     const refreshToken = await generateRefreshToken(user);
