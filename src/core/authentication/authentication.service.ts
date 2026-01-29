@@ -4,6 +4,7 @@ import { hashPassword, compare } from "../../helpers/bcrypt.helper.ts";
 import { BadRequest, NotFound } from "../../exceptions/catch.exception.ts";
 import { generateAccessToken, generateRefreshToken } from "../../helpers/jwt.helper.ts";
 import jwt from "jsonwebtoken";
+import type { User } from "../../../generated/prisma/client.ts";
 
 interface Payload {
   [key: string]: any;
@@ -14,9 +15,11 @@ class AuthenticationService extends BaseService {
     super(prisma);
   }
   login = async (payload: any) => {
-    const user = await this.db.user.findUnique({ where: { email: payload.email }});
+    const user: User | null = await this.db.user.findUnique({ where: { email: payload.email }});
+    console.log("user :", user?.password);
+    console.log("payload: ", payload.password)
     if (!user) throw new NotFound('Email not registered');
-    if (!await compare(payload.password, user.password)) throw new BadRequest('Invalid password');
+    if (!compare(payload.password, user?.password)) throw new BadRequest('Invalid password');
 
     const accessToken = await generateAccessToken(user);
     const refreshToken = await generateRefreshToken(user);
