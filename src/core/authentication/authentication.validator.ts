@@ -10,10 +10,12 @@ export const AuthenticationValidator = {
   }),
   register: Joi.object({
     name: Joi.string().min(3).max(30).required(),
-    address: Joi.string().min(10).required(),
-    email: Joi.string().email().required(),
-    password: Joi.string().min(6).required()
-  })
+    nomorInduk: Joi.string().required(),
+  }),
+  advancedRegister: Joi.object({
+    name: Joi.string().required(),
+    nomorInduk: Joi.string().required(),
+  }),
 };
 
 export default AuthenticationValidator;

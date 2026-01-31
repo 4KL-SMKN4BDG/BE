@@ -5,7 +5,7 @@ export default defineConfig({
   schema: "prisma/schema.prisma",
   migrations: {
     path: "prisma/migrations",
-    seed: 'tsx prisma/seeders/seed.ts'
+    seed: 'tsx -r dotenv/config prisma/seeders/seed.ts'
   },
   engine: "classic",
   datasource: {
