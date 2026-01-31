@@ -9,6 +9,7 @@ export async function UserSeed(adminRole: Role, studentRole: Role) {
             update: {},
             create: {
                 name: "Zico Oktorachman",
+                nomorInduk: "1234512345",
                 email: "admin@smkn4.com",
                 password: await hashPassword("password123"),
                 roles: {
@@ -21,6 +22,7 @@ export async function UserSeed(adminRole: Role, studentRole: Role) {
             update: {},
             create: {
                 name: "Wandra Danurwenda",
+                nomorInduk: "2324120094",
                 email: "student@smkn4.com",
                 password: await hashPassword("password123"),
                 roles: {
