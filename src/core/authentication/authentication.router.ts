@@ -27,5 +27,11 @@ r.post(
   controller.register
 );
 
+r.post(
+  '/advanced-register',
+  validatorMiddleware({ body: validator.advancedRegister }),
+  controller.advancedRegister
+)
+
 const authenticationRouter = r;
 export default authenticationRouter;

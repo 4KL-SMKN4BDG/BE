@@ -35,7 +35,7 @@ class AuthenticationService extends BaseService {
     const newrefreshToken = await generateRefreshToken(user);
 
     return { user: this.exclude(user, ['password']), token: { accessToken, refreshToken: newrefreshToken }};
-  }
+  };
 
   register = async (payload: any) => {
     if (await this.db.user.findUnique({ where: { email: payload.email }})) throw new BadRequest('Email already in use');
@@ -44,6 +44,27 @@ class AuthenticationService extends BaseService {
     const data = await this.db.user.create({ data: payload, roles: { connect: { id: user?.id } } as never });
 
     return this.exclude(data, ['password']);
+  };
+
+  advancedRegister = async (payload: any) => {
+    //convert dulu text nama dan nis nya
+    const arrayName = payload.name.split("\n");
+    const arrayNomorInduk = payload.nomorInduk.split("\n");
+    let finalArrayJSON = [];
+    for (let i = 0; i < arrayName.length; i++) {
+      const json = {
+        name: arrayName[i],
+        nomorInduk: arrayNomorInduk[i],
+        password: await hashPassword("password123")
+      }
+      finalArrayJSON.push(json);
+    };
+    
+    const newStudent = await this.db.user.createMany({
+      data: finalArrayJSON
+    });
+
+    return newStudent
   }
 }
 
