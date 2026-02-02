@@ -3,6 +3,7 @@ const prisma = new PrismaClient();
 
 import { RoleSeed } from './roleSeed.ts';
 import { UserSeed } from './userSeed.ts';
+import { CompanySeed } from './companySeed.ts';
 
 async function main() {
     try {
@@ -10,6 +11,7 @@ async function main() {
 
         const { adminRole, studentRole } = await RoleSeed();
         const { admin1, student1 } = await UserSeed(adminRole, studentRole);
+        const company = await CompanySeed();
 
         console.log('Seeding completed!');
     } catch (error) {
