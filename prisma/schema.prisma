@@ -10,7 +10,7 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -45,11 +45,11 @@ model Role {
 
 model Company {
   id          String   @id @default(uuid())
-  name        String
+  name        String   @unique
   description String?
   address     String?
   logo        String?
-  qtyStudent  String
+  qtyStudent  Int
 
   student     User[]  
 
