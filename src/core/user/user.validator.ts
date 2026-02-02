@@ -7,6 +7,8 @@ export const UserValidator = {
   update: Joi.object({
     name: Joi.string().optional(),
     nomorInduk: Joi.string().optional(),
+    class: Joi.string().optional(),
+    major: Joi.string().optional(),
     email: Joi.string().email().optional(),
     password: Joi.string().optional(),
     address: Joi.string().optional(),
