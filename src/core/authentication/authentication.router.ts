@@ -35,6 +35,7 @@ r.post(
 
 r.post(
   '/advanced-register',
+  auth(['ADMIN']),
   validatorMiddleware({ body: validator.advancedRegister }),
   controller.advancedRegister
 )
