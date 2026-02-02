@@ -15,8 +15,8 @@ class AuthenticationService extends BaseService {
     super(prisma);
   }
   login = async (payload: any) => {
-    const user: User | null = await this.db.user.findUnique({ where: { email: payload.email }});
-    if (!user) throw new NotFound('Email not registered');
+    const user = await this.db.user.findUnique({ where: { nomorInduk: payload.nomorInduk }});
+    if (!user) throw new NotFound('NIS not registered');
     if (!await compare(payload.password, user?.password)) throw new BadRequest('Invalid password');
 
     const accessToken = await generateAccessToken(user);
@@ -38,10 +38,13 @@ class AuthenticationService extends BaseService {
   };
 
   register = async (payload: any) => {
-    if (await this.db.user.findUnique({ where: { email: payload.email }})) throw new BadRequest('Email already in use');
-    payload.password = await hashPassword(payload.password);
-    const user = await this.db.role.findUnique({ where: { code: 'USER' }});
-    const data = await this.db.user.create({ data: payload, roles: { connect: { id: user?.id } } as never });
+    const data = await this.db.user.create({
+      data: {
+        name: payload.name,
+        nomorInduk: payload.nomorInduk,
+        password: await hashPassword(payload.nomorInduk)
+      }
+    });
 
     return this.exclude(data, ['password']);
   };
@@ -55,7 +58,7 @@ class AuthenticationService extends BaseService {
       const json = {
         name: arrayName[i],
         nomorInduk: arrayNomorInduk[i],
-        password: await hashPassword("password123")
+        password: await hashPassword(arrayNomorInduk[i])
       }
       finalArrayJSON.push(json);
     };
