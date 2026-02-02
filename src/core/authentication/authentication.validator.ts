@@ -5,6 +5,10 @@ export const AuthenticationValidator = {
     nomorInduk: Joi.string().required(),
     password: Joi.string().min(6).required()
   }),
+  resetPassword: Joi.object({
+    nomorInduk: Joi.string().required(),
+    newPassword: Joi.string().min(6).required()
+  }),
   refresh: Joi.object({
     refreshToken: Joi.string().required()
   }),

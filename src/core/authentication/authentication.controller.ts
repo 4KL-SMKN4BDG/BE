@@ -16,6 +16,11 @@ class AuthenticationController extends BaseController {
     return this.ok(res, data, "Login successful");
   });
 
+  resetPassword = this.wrapper(async (req: Request, res: Response) => {
+    const data = await this.#service.resetPassword(req.body);
+    return this.ok(res, data, "Reset password successful");
+  })
+
   refresh = this.wrapper(async (req: Request, res: Response) => {
     const data = await this.#service.refresh(req.body.refreshToken);
     return this.created(res, data, "Refresh token successful");

@@ -25,6 +25,14 @@ class AuthenticationService extends BaseService {
     return { user: this.exclude(user, ['password']), token: { accessToken, refreshToken }};
   };
 
+  resetPassword = async (payload: any) => {
+    const user = await this.db.user.update({ 
+      where: { nomorInduk: payload.nomorInduk },
+      data: { password: await hashPassword(payload.newPassword)}
+    });
+    return this.exclude(user, ['password']);
+  };
+
   refresh = async (refreshToken: string) => {
     const decoded: any = jwt.decode(refreshToken);
 

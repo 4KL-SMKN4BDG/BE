@@ -16,6 +16,12 @@ r.post(
 );
 
 r.post(
+  '/reset-password',
+  validatorMiddleware({ body: validator.resetPassword }),
+  controller.resetPassword
+);
+
+r.post(
   '/refresh',
   validatorMiddleware({ body: validator.refresh }),
   controller.refresh
