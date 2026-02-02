@@ -20,6 +20,8 @@ model User {
   password    String   
   name        String?
   nomorInduk  String   @unique
+  class       String?
+  major       String?
   address     String?
   status      String?
 
