@@ -11,14 +11,6 @@ export const AuthenticationValidator = {
   refresh: Joi.object({
     refreshToken: Joi.string().required()
   }),
-  register: Joi.object({
-    name: Joi.string().min(3).max(30).required(),
-    nomorInduk: Joi.string().required(),
-  }),
-  advancedRegister: Joi.object({
-    name: Joi.string().required(),
-    nomorInduk: Joi.string().required(),
-  }),
 };
 
 export default AuthenticationValidator;

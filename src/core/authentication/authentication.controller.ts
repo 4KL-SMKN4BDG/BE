@@ -25,16 +25,6 @@ class AuthenticationController extends BaseController {
     const data = await this.#service.refresh(req.body.refreshToken);
     return this.created(res, data, "Refresh token successful");
   });
-
-  register = this.wrapper(async (req: Request, res: Response) => {
-    const data = await this.#service.register(req.body);
-    return this.ok(res, data, "Register successful");
-  });
-
-  advancedRegister = this.wrapper(async (req: Request, res: Response) => {
-    const data = await this.#service.advancedRegister(req.body);
-    return this.ok(res, data, "Register successful");
-  })
 }
 
 export default AuthenticationController;

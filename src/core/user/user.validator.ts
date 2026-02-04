@@ -2,7 +2,12 @@ import Joi from "joi";
 
 export const UserValidator = {
   create: Joi.object({
-    // no-data
+    role: Joi.string().required(),
+    newUsers: Joi.array().items(
+      Joi.object({
+        name: Joi.string().required(),
+        nomorInduk: Joi.string().required(),
+    }))
   }),
   update: Joi.object({
     name: Joi.string().optional(),

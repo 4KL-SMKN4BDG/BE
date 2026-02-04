@@ -28,18 +28,5 @@ r.post(
   controller.refresh
 );
 
-r.post(
-  '/register',
-  validatorMiddleware({ body: validator.register }),
-  controller.register
-);
-
-r.post(
-  '/advanced-register',
-  auth(['ADMIN']),
-  validatorMiddleware({ body: validator.advancedRegister }),
-  controller.advancedRegister
-)
-
 const authenticationRouter = r;
 export default authenticationRouter;

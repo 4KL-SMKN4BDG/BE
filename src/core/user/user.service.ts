@@ -1,5 +1,7 @@
 import BaseService from "../../base/service.base.ts";
 import prisma from '../../config/prisma.db.ts';
+import { hashPassword } from "../../helpers/bcrypt.helper.ts";
+import { NotFound } from "../../exceptions/catch.exception.ts";
 
 interface Payload {
   [key: string]: any;
@@ -27,8 +29,25 @@ class UserService extends BaseService {
   };
 
   create = async (payload: any) => {
-    const data = await this.db.user.create({ data: payload });
-    return data;
+    const role = await this.db.role.findUnique({
+      where: { code: payload.role}
+    });
+    if (!role) throw new NotFound('Role not found');
+
+    const newUsers = payload.newUsers;
+
+    for (let i = 0; i < newUsers.length; i++) {
+      await this.db.user.create({
+        data: {
+          name: newUsers[i].name,
+          nomorInduk: newUsers[i].nomorInduk,
+          password: await hashPassword(newUsers[i].nomorInduk),
+          roles: { connect: { id: role.id }} 
+        }
+      });
+    };
+
+    return `Successfully registered ${newUsers.length} users as a ${role.code}`;
   };
 
   update = async (id: any, payload: Payload) => {

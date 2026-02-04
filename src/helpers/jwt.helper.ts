@@ -6,7 +6,7 @@ const privateKey = fs.readFileSync('secrets/private.pem', 'utf8');
 export const generateAccessToken = async (user: any) => {
     const payload = {
         userId: user.id,
-        email: user.email,
+        nomorInduk: user.nomorInduk,
     };
 
     return jwt.sign(payload, privateKey, {
@@ -18,7 +18,7 @@ export const generateAccessToken = async (user: any) => {
 export const generateRefreshToken = async (user: any) => {
     const payload = {
         userId: user.id,
-        email: user.email,
+        nomorInduk: user.nomorInduk,
     };
 
     return jwt.sign(payload, privateKey, {
