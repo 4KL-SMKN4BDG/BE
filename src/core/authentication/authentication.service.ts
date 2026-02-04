@@ -25,10 +25,10 @@ class AuthenticationService extends BaseService {
     return { user: this.exclude(user, ['password']), token: { accessToken, refreshToken }};
   };
 
-  resetPassword = async (payload: any) => {
+  resetPassword = async (newPassword: any, nomorInduk: any) => {
     const user = await this.db.user.update({ 
-      where: { nomorInduk: payload.nomorInduk },
-      data: { password: await hashPassword(payload.newPassword)}
+      where: { nomorInduk: nomorInduk },
+      data: { password: await hashPassword(newPassword)}
     });
     return this.exclude(user, ['password']);
   };

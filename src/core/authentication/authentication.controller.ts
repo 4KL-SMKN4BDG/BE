@@ -17,7 +17,7 @@ class AuthenticationController extends BaseController {
   });
 
   resetPassword = this.wrapper(async (req: Request, res: Response) => {
-    const data = await this.#service.resetPassword(req.body);
+    const data = await this.#service.resetPassword(req.body.newPassword, req.user.nomorInduk);
     return this.ok(res, data, "Reset password successful");
   })
 

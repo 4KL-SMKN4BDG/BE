@@ -17,6 +17,7 @@ r.post(
 
 r.post(
   '/reset-password',
+  auth(),
   validatorMiddleware({ body: validator.resetPassword }),
   controller.resetPassword
 );
