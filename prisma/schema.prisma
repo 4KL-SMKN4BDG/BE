@@ -15,15 +15,23 @@ datasource db {
 }
 
 model User {
-  id          String   @id @default(uuid())
-  email       String?  @unique
-  password    String   
+  id          String   @id @default(uuid())   
   name        String?
   nomorInduk  String   @unique
+  password    String
+  email       String?  @unique
+
   class       String?
   major       String?
-  address     String?
   status      String?
+  organization String?
+  experience  String?
+
+  birthPlace  String?
+  birthDate   DateTime?
+  address     String?
+
+  photo       String?
 
   companyId   String?
 
@@ -53,7 +61,7 @@ model Company {
   logo        String?
   capacity    Int
 
-  student     User[]  
+  users     User[]  
 
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
