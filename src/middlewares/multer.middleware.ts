@@ -20,7 +20,7 @@ const createStorage = (prefixPath: string, uploadPath: string, context = 'RNDM')
             cb(null, fullPath);
         },
         filename: function (req, file, cb) {
-            const uniqueSuffix = Date.now;
+            const uniqueSuffix = Date.now();
             const fileName = uniqueSuffix + '_' + `${file.fieldname}-${file.originalname}`;
             cb(null, fileName);
         },
