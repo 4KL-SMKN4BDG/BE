@@ -10,7 +10,7 @@ export async function CompanySeed() {
             name: "PT Mughni Sejahtera",
             description: "Perusahaan yang bergerak di bidang teknologi informasi.",
             address: "JL. Soekarno Hatta No.123, Bandung",
-            qtyStudent: 4
+            capacity: 4
         }
     });
     const company2 = await prisma.company.upsert({
@@ -20,7 +20,7 @@ export async function CompanySeed() {
             name: "PT Wandra Mencari Cinta",
             description: "Perusahaan yang bergerak di bidang ilmu pra-nikah.",
             address: "JL. Soeka Kamu No.123, Bandung",
-            qtyStudent: 10
+            capacity: 10
         }
     });
 

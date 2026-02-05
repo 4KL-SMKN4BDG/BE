@@ -51,7 +51,7 @@ model Company {
   description String?
   address     String?
   logo        String?
-  qtyStudent  Int
+  capacity    Int
 
   student     User[]  
 
