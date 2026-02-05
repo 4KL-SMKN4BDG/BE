@@ -14,7 +14,7 @@ class UserService extends BaseService {
 
   findAll = async (query: any) => {
     const q: { [key: string]: any } = this.transformBrowseQuery(query);
-    const data = await this.db.user.findMany({ ...q as {[key: string]: never} });
+    const data = await this.db.user.findMany({ ...q as {[key: string]: never}, include: { roles: true, company: true }, omit: { password: true } });
 
     if (query.paginate) {
       const countData = await this.db.user.count({ where: q.where });
@@ -24,7 +24,7 @@ class UserService extends BaseService {
   };
 
   findById = async (id: any) => {
-    const data = await this.db.user.findUnique({ where: { id } });
+    const data = await this.db.user.findUnique({ where: { id }, include: { roles: true, company: true}, omit: { password: true } });
     return data;
   };
 
