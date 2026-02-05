@@ -4,6 +4,7 @@ import CompanyController from "./company.controller.ts";
 import CompanyValidator from "./company.validator.ts";
 import { baseValidator } from "../../base/validator.base.ts";
 import auth from "../../middlewares/auth.middleware.ts";
+import uploader from "../../middlewares/multer.middleware.ts";
 
 const r = Router(),
   validator = CompanyValidator,
@@ -19,6 +20,9 @@ r.get("/show-one/:id", controller.findById);
 
 r.post(
   "/create",
+  uploader("/companyLogo", "image").fields([
+    { name: "logo" }
+  ]),
   auth(['ADMIN']),
   validatorMiddleware({ body: validator.create }),
   controller.create
@@ -26,6 +30,9 @@ r.post(
   
   r.put(
     "/update/:id",
+    uploader("/companyLogo", "image").fields([
+      { name: "logo" }
+    ]),
     auth(['ADMIN']),
     validatorMiddleware({ body: validator.update }),
     controller.update

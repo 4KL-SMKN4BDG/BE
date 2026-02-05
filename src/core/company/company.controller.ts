@@ -24,12 +24,12 @@ class CompanyController extends BaseController {
   });
 
   create = this.wrapper(async (req: Request, res: Response) => {
-    const data = await this.#service.create(req.body);
+    const data = await this.#service.create(req.body, req.files);
     return this.created(res, data, "Company successfully created");
   });
 
   update = this.wrapper(async (req: Request, res: Response) => {
-    const data = await this.#service.update(req.params.id, req.body);
+    const data = await this.#service.update(req.params.id, req.body, req.files);
     return this.ok(res, data, "Company successfully updated");
   });
 
