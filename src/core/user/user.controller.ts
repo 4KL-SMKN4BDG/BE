@@ -25,7 +25,7 @@ class UserController extends BaseController {
 
   create = this.wrapper(async (req: Request, res: Response) => {
     const data = await this.#service.create(req.body);
-    return this.created(res, data, "User successfully created");
+    return this.created(res, data, `${req.body.newUsers.length} User as ${req.body.role.toLowerCase()} successfully created`);
   });
 
   update = this.wrapper(async (req: Request, res: Response) => {

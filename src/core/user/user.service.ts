@@ -36,8 +36,9 @@ class UserService extends BaseService {
 
     const newUsers = payload.newUsers;
 
+    const data = [];
     for (let i = 0; i < newUsers.length; i++) {
-      await this.db.user.create({
+      const user = await this.db.user.create({
         data: {
           name: newUsers[i].name,
           nomorInduk: newUsers[i].nomorInduk,
@@ -45,9 +46,10 @@ class UserService extends BaseService {
           roles: { connect: { id: role.id }} 
         }
       });
+      data.push(this.exclude(user, ['password']));
     };
 
-    return `Successfully registered ${newUsers.length} users as a ${role.code}`;
+    return data;
   };
 
   update = async (id: any, payload: Payload) => {
