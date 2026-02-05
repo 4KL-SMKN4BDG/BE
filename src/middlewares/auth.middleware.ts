@@ -7,6 +7,7 @@ import type { Request, Response, NextFunction } from 'express';
 
 export default function auth(roles?: string[]) {
     return async (req: Request, res: Response, next: NextFunction) => {
+        // rencana selanjutnya: benerin return dari error handler dari no access token dan expired token
         try {
             const authHeader = req.headers.authorization;
             if (!authHeader) {

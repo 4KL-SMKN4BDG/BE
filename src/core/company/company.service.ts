@@ -13,7 +13,8 @@ class CompanyService extends BaseService {
   findAll = async (query: any) => {
     const q: { [key: string]: any } = this.transformBrowseQuery(query);
     const data = await this.db.company.findMany({ ...q as {[key: string]: never}, include: { users: { omit: { password: true } } } });
-
+// rencana selanjutnya: tambahkan relasi users dengan omit password, dan memisahkan antara teacher dengan student
+// rencana selanjutnya: tambahkan base url untuk akses logo company
     if (query.paginate) {
       const countData = await this.db.company.count({ where: q.where });
       return this.paginate(data, countData, q);
@@ -23,6 +24,8 @@ class CompanyService extends BaseService {
 
   findById = async (id: any) => {
     const data = await this.db.company.findUnique({ where: { id }, include: { users: { omit: { password: true } } } });
+    // rencana selanjutnya: tambahkan relasi users dengan omit password, dan memisahkan antara teacher dengan student
+// rencana selanjutnya: tambahkan base url untuk akses logo company
     return data;
   };
 
@@ -32,6 +35,7 @@ class CompanyService extends BaseService {
       const companyData = {
         name: payload.name[i],
         description: payload.description[i],
+        // rencana selanjutnya: untuk https dari google maps gak perlu dimasukan ke database
         address: payload.address[i],
         capacity: payload.capacity[i],
         logo: ''
@@ -47,6 +51,7 @@ class CompanyService extends BaseService {
   update = async (id: any, payload: Payload, files: any) => {
     if (files && files.logo && files.logo[0]) payload.logo = files.logo[0].path;
     const data = await this.db.company.update({ where: { id }, data: payload });
+    // rencana selajutnya: hapus file lama agar tidak menumpuk di server
     return data;
   };
 
