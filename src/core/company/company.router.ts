@@ -40,5 +40,19 @@ r.post(
     
 r.delete("/delete/:id", auth(['ADMIN']), controller.delete);
 
+r.post(
+  "/apply",
+  auth(),
+  validatorMiddleware({ body: validator.apply }),
+  controller.apply
+)
+
+r.post(
+  "/response",
+  auth(['ADMIN']),
+  validatorMiddleware({ body: validator.response }),
+  controller.response
+)
+
 const companyRouter = r;
 export default companyRouter;

@@ -37,6 +37,16 @@ class CompanyController extends BaseController {
     const data = await this.#service.delete(req.params.id);
     return this.noContent(res, "Company successfully deleted");
   });
+
+  apply = this.wrapper(async (req: Request, res: Response) => {
+    const data = await this.#service.apply(req.user, req.body.companyId);
+    return this.ok(res, data, "Application successfully sent")
+  })
+
+  response = this.wrapper(async (req: Request, res: Response) => {
+    const data = await this.#service.response(req.user, req.body);
+    return this.ok(res, data, `Application ${req.body.respone}` )
+  })
 }
 
 export default CompanyController;

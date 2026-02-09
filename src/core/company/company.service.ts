@@ -12,9 +12,13 @@ class CompanyService extends BaseService {
 
   findAll = async (query: any) => {
     const q: { [key: string]: any } = this.transformBrowseQuery(query);
-    const data = await this.db.company.findMany({ ...q as {[key: string]: never}, include: { users: { omit: { password: true } } } });
-// rencana selanjutnya: tambahkan relasi users dengan omit password, dan memisahkan antara teacher dengan student
-// rencana selanjutnya: tambahkan base url untuk akses logo company
+    const data = await this.db.company.findMany({ ...q as {[key: string]: never}, include: { users: { omit: { password: true }, include: { roles: true } } } });
+    data.map((company: any) => {
+      company.logo = company.logo ? `https://localhost:3000/${company.logo}` : null;
+      company.teachers = company.users.filter((user: any) => user.roles.code === "TEACHER");
+      company.students = company.users.filter((user: any) => user.roles.code === "STUDENT");
+      delete company.users;
+    })
     if (query.paginate) {
       const countData = await this.db.company.count({ where: q.where });
       return this.paginate(data, countData, q);
@@ -23,9 +27,11 @@ class CompanyService extends BaseService {
   };
 
   findById = async (id: any) => {
-    const data = await this.db.company.findUnique({ where: { id }, include: { users: { omit: { password: true } } } });
-    // rencana selanjutnya: tambahkan relasi users dengan omit password, dan memisahkan antara teacher dengan student
-// rencana selanjutnya: tambahkan base url untuk akses logo company
+    const data: any = await this.db.company.findUnique({ where: { id }, include: { users: { omit: { password: true } } } });
+      data.logo = data.logo ? `https://localhost:300/${data.logo}` : null;
+      data.teachers = data.users.filter((user: any) => user.roles.code === "TEACHER");
+      data.students = data.users.filter((user: any) => user.roles.code === "STUDENT");
+      delete data.users;
     return data;
   };
 
@@ -40,7 +46,7 @@ class CompanyService extends BaseService {
         capacity: payload.capacity[i],
         logo: ''
       };
-      if (files && files.logo && files.logo[i]) companyData.logo = files.logo[i].path;
+      if (files && files.logo && files.logo[i]) companyData.logo = files.logo[i].path.replace(/\\/g, '/');
       dataArray.push(companyData);
     };
     
@@ -59,6 +65,27 @@ class CompanyService extends BaseService {
     const data = await this.db.company.delete({ where: { id } });
     return data;
   };
+
+  apply = async (user: any, companyId: any) => {
+    const data = await this.db.user.update({
+        where: { id: user.id },
+        data: {
+          status: "PENDING",
+          company: { connect: { id: companyId }}
+        }
+    });
+    return data;
+  };
+
+  response = async (user: any, payload: any) => {
+    const data = await this.db.user.update({
+      where: { id: payload.userId },
+      data: {
+        status: payload.status
+      }
+    });
+    return data;
+  }
 }
 
 export default CompanyService;  

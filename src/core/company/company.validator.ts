@@ -13,6 +13,13 @@ export const CompanyValidator = {
     address: Joi.string().optional(),
     capacity: Joi.number().optional()
   }),
+  apply: Joi.object({
+    companyId: Joi.string().required()
+  }),
+  response: Joi.object({
+    userId: Joi.string().required(),
+    status: Joi.string().required()
+  })
 };
 
 export default CompanyValidator;
