@@ -19,5 +19,13 @@ export async function RoleSeed() {
                 description: "Student"
             }
         });
-        return { adminRole, studentRole };
+        const teacherRole = await prisma.role.upsert({
+            where: { code: "TEACHER" },
+            update: {},
+            create: {
+                code: "TEACHER",
+                description: "Teacher"
+            }
+        });
+        return { adminRole, studentRole, teacherRole };
 }

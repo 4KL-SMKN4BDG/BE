@@ -15,8 +15,8 @@ class CompanyService extends BaseService {
     const data = await this.db.company.findMany({ ...q as {[key: string]: never}, include: { users: { omit: { password: true }, include: { roles: true } } } });
     data.map((company: any) => {
       company.logo = company.logo ? `https://localhost:3000/${company.logo}` : null;
-      company.teachers = company.users.filter((user: any) => user.roles.code === "TEACHER");
-      company.students = company.users.filter((user: any) => user.roles.code === "STUDENT");
+      company.teachers = company.users.filter((user: any) => user.roles[0].code === "TEACHER");
+      company.students = company.users.filter((user: any) => user.roles[0].code === "STUDENT");
       delete company.users;
     })
     if (query.paginate) {
@@ -85,7 +85,16 @@ class CompanyService extends BaseService {
       }
     });
     return data;
-  }
+  };
+
+  addMentor = async (payload: any) => {
+    const data = await this.db.user.update({
+      where: { id: payload.teacherId },
+      data: {
+        company: { connect: { id: payload.companyId }}
+      }
+    })
+  };
 }
 
 export default CompanyService;  

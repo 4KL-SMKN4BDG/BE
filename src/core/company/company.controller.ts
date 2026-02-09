@@ -41,12 +41,17 @@ class CompanyController extends BaseController {
   apply = this.wrapper(async (req: Request, res: Response) => {
     const data = await this.#service.apply(req.user, req.body.companyId);
     return this.ok(res, data, "Application successfully sent")
-  })
+  });
 
   response = this.wrapper(async (req: Request, res: Response) => {
     const data = await this.#service.response(req.user, req.body);
     return this.ok(res, data, `Application ${req.body.respone}` )
-  })
+  });
+
+  addMentor = this.wrapper(async (req: Request, res: Response) => {
+    const data = await this.#service.addMentor(req.body);
+    return this.ok(res, data, `Mentor Successfully added` )
+  });
 }
 
 export default CompanyController;

@@ -19,6 +19,10 @@ export const CompanyValidator = {
   response: Joi.object({
     userId: Joi.string().required(),
     status: Joi.string().required()
+  }),
+  mentor: Joi.object({
+    teacherId: Joi.string().required(),
+    companyId: Joi.string().required()
   })
 };
 

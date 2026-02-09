@@ -42,16 +42,23 @@ r.delete("/delete/:id", auth(['ADMIN']), controller.delete);
 
 r.post(
   "/apply",
-  auth(),
+  auth(['STUDENT']),
   validatorMiddleware({ body: validator.apply }),
   controller.apply
-)
+);
 
 r.post(
   "/response",
   auth(['ADMIN']),
   validatorMiddleware({ body: validator.response }),
   controller.response
+);
+
+r.post(
+  "/add-mentor",
+  auth(['ADMIN']),
+  validatorMiddleware({ body: validator.mentor }),
+  controller.addMentor
 )
 
 const companyRouter = r;
