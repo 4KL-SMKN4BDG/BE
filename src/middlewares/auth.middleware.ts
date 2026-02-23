@@ -1,4 +1,4 @@
-import httpStatus from 'http-status-codes';
+import { StatusCodes } from 'http-status-codes';
 import { ApiError } from '../exceptions/errors.exception.ts';
 import { verifyToken } from '../helpers/jwt.helper.ts';
 import { Unauthenticated } from '../exceptions/catch.exception.ts';
@@ -12,7 +12,7 @@ export default function auth(roles?: string[]) {
             const authHeader = req.headers.authorization;
             if (!authHeader) {
                 return next(new ApiError(
-                    httpStatus.UNAUTHORIZED, 
+                    StatusCodes.UNAUTHORIZED, 
                     'NO_AUTHORIZATION', 
                     'Please Authenticate'
                 )
@@ -23,7 +23,7 @@ export default function auth(roles?: string[]) {
             const token = parts[1];
             if (!token) {
                 return next(new ApiError(
-                    httpStatus.UNAUTHORIZED,
+                    StatusCodes.UNAUTHORIZED,
                     'NO_TOKEN',
                     'please Authenticate'
                 )
@@ -44,7 +44,7 @@ export default function auth(roles?: string[]) {
 
             if (!user) {
                 return next(new ApiError(
-                    httpStatus.UNAUTHORIZED,
+                    StatusCodes.UNAUTHORIZED,
                     'USER_NOT_FOUND',
                     'please Authenticate'
                 )
@@ -56,7 +56,7 @@ export default function auth(roles?: string[]) {
                 const hasAccess = roles.some(allowedRole => userRoleCodes.includes(allowedRole));
                 if (!hasAccess) {
                     return next(new ApiError(
-                        httpStatus.FORBIDDEN,
+                        StatusCodes.FORBIDDEN,
                         'NO_ACCESS',
                         'Unauthorized'
                     )
@@ -70,7 +70,7 @@ export default function auth(roles?: string[]) {
             if (e.message === 'jwt expired') {
                 return next(
                     new ApiError(
-                        httpStatus.UNAUTHORIZED,
+                        StatusCodes.UNAUTHORIZED,
                         'TOKEN_EXPIRED',
                         'Your session has expired, please login again'
                 )
