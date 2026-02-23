@@ -2,6 +2,9 @@ import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
 import router from './routes.ts';
+import { StatusCodes } from 'http-status-codes';
+import path from 'path';
+import fs from 'fs';
 
 const app = express();
 
@@ -35,6 +38,36 @@ app.use(
 app.use(express.text({ type: 'text/html' }));
 
 app.use('/api/v1', router);
+
+app.get('/api/download', (req, res, next) => {
+    const filePath = req.query.path;
+    if(!filePath) {
+        return res.status(StatusCodes.BAD_REQUEST).json({
+            status: false,
+            code: StatusCodes.BAD_REQUEST,
+            message: 'File path not provided.',
+        });
+    }
+
+    const resolvedPath = path.resolve(filePath as string);
+
+    fs.access(resolvedPath, fs.constants.F_OK, (err) => {
+        if (err) {
+            return res.status(StatusCodes.NOT_FOUND).json({
+                status: false,
+                code: StatusCodes.NOT_FOUND,
+                message: 'FIle not found.',
+            });
+        }
+
+    res.sendFile(resolvedPath, (err) => {
+        if (err) {
+            console.error('Error sending file: ', err);
+            return next(err);
+        }
+    });
+    });
+});
 
 app.route('/').get((req, res) => {
     return res.json({
