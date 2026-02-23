@@ -54,10 +54,13 @@ class CompanyService extends BaseService {
     return data;
   };
 
-  update = async (id: any, payload: Payload, files: any) => {
-    if (files && files.logo && files.logo[0]) payload.logo = files.logo[0].path;
+    update = async (id: any, payload: Payload, files: any) => {
+    const oldLogo = await this.db.company.findUnique({ where: { id }, select: { logo: true } });
+    if (files && files.logo && files.logo[0]) payload.logo = files.logo[0].path.replace(/\\/g, '/');
     const data = await this.db.company.update({ where: { id }, data: payload });
-    // rencana selajutnya: hapus file lama agar tidak menumpuk di server
+    if (files && files.logo && files.logo[0] && oldLogo && oldLogo.logo) {
+      this.deleteUpload(oldLogo.logo);
+    }
     return data;
   };
 
