@@ -1,8 +1,8 @@
-import { PrismaClient, type Role } from "../../generated/prisma/client.ts";
+import { PrismaClient, type Role, type Company } from "../../generated/prisma/client.ts";
 import { hashPassword } from "../../src/helpers/bcrypt.helper.ts";
 const prisma = new PrismaClient();
 
-export async function UserSeed(adminRole: Role, studentRole: Role, teacherRole: Role) {
+export async function UserSeed(adminRole: Role, studentRole: Role, teacherRole: Role, company1: Company) {
         console.log("Seeding Users...");
         const admin1 = await prisma.user.upsert({
             where: { email: "admin@smkn4.com" },
@@ -27,7 +27,10 @@ export async function UserSeed(adminRole: Role, studentRole: Role, teacherRole: 
                 password: await hashPassword("password123"),
                 roles: {
                     connect: { id: studentRole.id }
-                }
+                },
+                // company: {
+                //     connect: { id: company1.id }
+                // }
             }
         });
         const teacher1 = await prisma.user.upsert({
@@ -40,7 +43,10 @@ export async function UserSeed(adminRole: Role, studentRole: Role, teacherRole: 
                 password: await hashPassword("password123"),
                 roles: {
                     connect: { id: teacherRole.id }
-                }
+                },
+                // company: {
+                //     connect: { id: company1.id }
+                // }
             }
         });
         return { admin1, student1 };

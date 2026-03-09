@@ -10,8 +10,8 @@ async function main() {
         console.log('Starting seeding process...');
 
         const { adminRole, studentRole, teacherRole } = await RoleSeed();
-        const { admin1, student1 } = await UserSeed(adminRole, studentRole, teacherRole);
-        const company = await CompanySeed();
+        const { company1, company2 } = await CompanySeed();
+        const { admin1, student1 } = await UserSeed(adminRole, studentRole, teacherRole, company1);
 
         console.log('Seeding completed!');
     } catch (error) {
