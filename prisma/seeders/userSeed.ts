@@ -22,7 +22,7 @@ export async function UserSeed(adminRole: Role, studentRole: Role, teacherRole: 
             update: {},
             create: {
                 name: "Wandra Danurwenda",
-                nomorInduk: "2324120094",
+                nomorInduk: "2324120105",
                 email: "student@smkn4.com",
                 password: await hashPassword("password123"),
                 roles: {
