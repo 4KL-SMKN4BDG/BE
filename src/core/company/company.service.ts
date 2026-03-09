@@ -29,7 +29,7 @@ class CompanyService extends BaseService {
 
   findById = async (id: any) => {
     const data: any = await this.db.company.findUnique({ where: { id }, include: { users: { omit: { password: true } } } });
-      data.logo = data.logo ? `https://localhost:300/${data.logo}` : null;
+      data.logo = data.logo ? `https://localhost:3000/${data.logo}` : null;
       data.teachers = data.users.filter((user: any) => user.roles.code === "TEACHER");
       data.students = data.users.filter((user: any) => user.roles.code === "STUDENT");
       delete data.users;
@@ -59,9 +59,7 @@ class CompanyService extends BaseService {
     const oldLogo = await this.db.company.findUnique({ where: { id }, select: { logo: true } });
     if (files && files.logo && files.logo[0]) payload.logo = files.logo[0].path.replace(/\\/g, '/');
     const data = await this.db.company.update({ where: { id }, data: payload });
-    if (files && files.logo && files.logo[0] && oldLogo && oldLogo.logo) {
-      this.deleteUpload(oldLogo.logo);
-    }
+    if (payload.logo && oldLogo && oldLogo.logo) this.deleteUpload(oldLogo.logo);
     return data;
   };
 
