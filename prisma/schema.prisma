@@ -15,54 +15,54 @@ datasource db {
 }
 
 model User {
-  id          String   @id @default(uuid())   
-  name        String?
-  nomorInduk  String   @unique
-  password    String
-  email       String?  @unique
+  id               String   @id @default(uuid())   
+  name             String?
+  nomorInduk       String   @unique
+  password         String
+  email            String?  @unique
+     
+  class            String?
+  major            String?
+  status           String?
+  organizationDesc String?
+  experienceDesc   String?
 
-  class       String?
-  major       String?
-  status      String?
-  organization String?
-  experience  String?
+  birthPlace       String?
+  birthDate        DateTime?
+  address          String?
 
-  birthPlace  String?
-  birthDate   DateTime?
-  address     String?
+  profilePhoto     String?
 
-  photo       String?
-
-  companyId   String?
-
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  company     Company? @relation(fields: [companyId], references: [id])
-  roles       Role[]
+  companyId        String?
+     
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+     
+  company          Company? @relation(fields: [companyId], references: [id])
+  roles            Role[]
 }
 
 model Role {
-  id          String   @id @default(uuid())
-  code        String   @unique
-  description String?
-
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  users       User[]
+  id               String   @id @default(uuid())
+  code             String   @unique
+  description      String?
+     
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+     
+  users            User[]
 }
 
 model Company {
-  id          String   @id @default(uuid())
-  name        String   @unique
-  description String?
-  address     String?
-  logo        String?
-  capacity    Int
+  id               String   @id @default(uuid())
+  name             String   @unique
+  description      String?
+  address          String?
+  logo             String?
+  capacity         Int
+     
+  users            User[]  
 
-  users     User[]  
-
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
 }
