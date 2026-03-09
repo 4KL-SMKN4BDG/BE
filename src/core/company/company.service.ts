@@ -13,13 +13,15 @@ class CompanyService extends BaseService {
 
   findAll = async (query: any) => {
     const q: { [key: string]: any } = this.transformBrowseQuery(query);
-    const data = await this.db.company.findMany({ ...q as {[key: string]: never}, include: { users: { omit: { password: true }, include: { roles: true } } } });
+    const data = await this.db.company.findMany({ ...q as {[key: string]: never},
+      //  include: { users: { omit: { password: true }, include: { roles: true } } } 
+      });
     data.map((company: any) => {
       company.logo = company.logo ? `https://localhost:3000/${company.logo}` : null;
-      company.teachers = company.users.filter((user: any) => user.roles[0].code === "TEACHER");
-      company.students = company.users.filter((user: any) => user.roles[0].code === "STUDENT");
-      delete company.users;
-    })
+      // company.teachers = company.users.filter((user: any) => user.roles[0].code === "TEACHER");
+      // company.students = company.users.filter((user: any) => user.roles[0].code === "STUDENT");
+      // delete company.users;
+    });
     if (query.paginate) {
       const countData = await this.db.company.count({ where: q.where });
       return this.paginate(data, countData, q);
