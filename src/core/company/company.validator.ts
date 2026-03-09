@@ -18,7 +18,7 @@ export const CompanyValidator = {
   }),
   response: Joi.object({
     userId: Joi.string().required(),
-    status: Joi.string().required()
+    status: Joi.string().required().valid("APPROVED", "REJECTED")
   }),
   mentor: Joi.object({
     teacherId: Joi.string().required(),
