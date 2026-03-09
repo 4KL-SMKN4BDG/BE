@@ -70,6 +70,7 @@ class CompanyService extends BaseService {
   };
 
   apply = async (user: any, companyId: any) => {
+    if (user.company) throw new Forbidden('User already has a company');
     const data = await this.db.user.update({
         where: { id: user.id },
         data: {
