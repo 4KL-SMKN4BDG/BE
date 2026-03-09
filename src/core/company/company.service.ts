@@ -1,5 +1,6 @@
 import BaseService from "../../base/service.base.ts";
 import prisma from '../../config/prisma.db.ts';
+import { Forbidden } from "../../exceptions/catch.exception.ts";
 
 interface Payload {
   [key: string]: any;
