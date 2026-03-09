@@ -29,7 +29,7 @@ class UserController extends BaseController {
   });
 
   update = this.wrapper(async (req: Request, res: Response) => {
-    const data = await this.#service.update(req.params.id, req.body);
+    const data = await this.#service.update(req.params.id, req.body, req.files);
     return this.ok(res, data, "User successfully updated");
   });
 

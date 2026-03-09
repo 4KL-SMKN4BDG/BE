@@ -4,6 +4,7 @@ import UserController from "./user.controller.ts";
 import UserValidator from "./user.validator.ts";
 import { baseValidator } from "../../base/validator.base.ts";
 import auth from "../../middlewares/auth.middleware.ts";
+import uploader from "../../middlewares/multer.middleware.ts";
 
 const r = Router(),
   validator = UserValidator,
@@ -26,7 +27,10 @@ r.post(
   
   r.put(
     "/update/:id",
-    auth(['ADMIN']),
+    auth(),
+    uploader("/UserPhoto", "image").fields([
+      { name: "profilePhoto"}
+    ]),
     validatorMiddleware({ body: validator.update }),
     controller.update
     );

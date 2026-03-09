@@ -15,6 +15,9 @@ class UserService extends BaseService {
   findAll = async (query: any) => {
     const q: { [key: string]: any } = this.transformBrowseQuery(query);
     const data = await this.db.user.findMany({ ...q as {[key: string]: never}, include: { roles: true, company: true }, omit: { password: true } });
+    data.map((user: any) => {
+      user.profilePhoto = user.profilePhoto ? `https://localhost:3000/${user.profilePhoto}` : null;
+    })
 
     if (query.paginate) {
       const countData = await this.db.user.count({ where: q.where });
@@ -25,6 +28,7 @@ class UserService extends BaseService {
 
   findById = async (id: any) => {
     const data = await this.db.user.findUnique({ where: { id }, include: { roles: true, company: true}, omit: { password: true } });
+    if (data) data.profilePhoto = data.profilePhoto ? `https://localhost:3000/${data.profilePhoto}` : null;
     return data;
   };
 
@@ -52,8 +56,11 @@ class UserService extends BaseService {
     return data;
   };
 
-  update = async (id: any, payload: Payload) => {
+  update = async (id: any, payload: Payload, files: any) => {
+    const oldPhoto = await this.db.user.findUnique({ where: { id }, select: { profilePhoto: true } });
+    if (files && files.profilePhoto && files.profilePhoto[0]) payload.profilePhoto = files.profilePhoto[0].path.replace(/\\/g, '/');
     const data = await this.db.user.update({ where: { id }, data: payload });
+    if (payload.profilePhoto && oldPhoto && oldPhoto.profilePhoto) this.deleteUpload(oldPhoto.profilePhoto);
     return data;
   };
 
