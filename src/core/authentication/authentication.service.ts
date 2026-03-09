@@ -16,7 +16,7 @@ class AuthenticationService extends BaseService {
   }
   login = async (payload: any) => {
     const user = await this.db.user.findUnique({ where: { nomorInduk: payload.nomorInduk }});
-    if (!user) throw new NotFound('NIS not registered');
+    if (!user) throw new NotFound('Nomor Induk not registered');
     if (!await compare(payload.password, user?.password)) throw new BadRequest('Invalid password');
 
     const accessToken = await generateAccessToken(user);
