@@ -6,11 +6,15 @@ export const AuthenticationValidator = {
     password: Joi.string().min(6).required()
   }),
   resetPassword: Joi.object({
-    newPassword: Joi.string().min(6).required()
+    newPassword: Joi.string().min(6).required(),
+    resetToken: Joi.string().required()
   }),
   refresh: Joi.object({
     refreshToken: Joi.string().required()
   }),
+  forgotPassword: Joi.object({
+    email: Joi.string().email().required()
+  })
 };
 
 export default AuthenticationValidator;

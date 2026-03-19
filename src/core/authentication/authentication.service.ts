@@ -4,6 +4,8 @@ import { hashPassword, compare } from "../../helpers/bcrypt.helper.ts";
 import { BadRequest, NotFound } from "../../exceptions/catch.exception.ts";
 import { generateAccessToken, generateRefreshToken, verifyToken } from "../../helpers/jwt.helper.ts";
 import type { User } from "../../../generated/prisma/client.ts";
+import { sendEmail } from '../../helpers/sendEmail.helper.ts';
+import { resetPasswordEmailTemplate } from "../../helpers/template/resetPasswordEmail.template.ts";
 
 interface Payload {
   [key: string]: any;
@@ -36,6 +38,18 @@ class AuthenticationService extends BaseService {
       data: { password: await hashPassword(newPassword)}
     });
     return this.exclude(user, ['password']);
+  };
+
+  forgotPassword = async (email: string) => {
+    const user = await this.db.user.findUnique({ where: { email } });
+    if (!user) throw new NotFound('Email not registered');
+
+    const resetToken = await generateAccessToken(user);
+    const resetPasswordLink = `${process.env.FE_RESET_PASSWORD_URL}?token=${resetToken}`;
+    const html = resetPasswordEmailTemplate(user.name || "Our best user", resetPasswordLink);
+
+    await sendEmail(email, "Reset Your Password", html);
+    return { name: user.name, email: user.email };
   };
 
   refresh = async (refreshToken: string) => {
