@@ -2,8 +2,7 @@ import BaseService from "../../base/service.base.ts";
 import prisma from "../../config/prisma.db.ts";
 import { hashPassword, compare } from "../../helpers/bcrypt.helper.ts";
 import { BadRequest, NotFound } from "../../exceptions/catch.exception.ts";
-import { generateAccessToken, generateRefreshToken } from "../../helpers/jwt.helper.ts";
-import jwt from "jsonwebtoken";
+import { generateAccessToken, generateRefreshToken, verifyToken } from "../../helpers/jwt.helper.ts";
 import type { User } from "../../../generated/prisma/client.ts";
 
 interface Payload {
@@ -25,17 +24,28 @@ class AuthenticationService extends BaseService {
     return { user: this.exclude(user, ['password']), token: { accessToken, refreshToken }};
   };
 
-  resetPassword = async (newPassword: any, nomorInduk: any) => {
+  resetPassword = async (newPassword: any, resetToken: any) => {
+    let decoded: any
+    try {
+      decoded = verifyToken(resetToken);
+    } catch(e) {
+      throw new BadRequest('Invalid or expired reset token')
+    };
     const user = await this.db.user.update({ 
-      where: { nomorInduk: nomorInduk },
+      where: { nomorInduk: decoded.nomorInduk },
       data: { password: await hashPassword(newPassword)}
     });
     return this.exclude(user, ['password']);
   };
 
   refresh = async (refreshToken: string) => {
-    const decoded: any = jwt.decode(refreshToken);
-
+    let decoded: any
+    try {
+      decoded = verifyToken(refreshToken);
+    } catch (e) {
+      throw new BadRequest('Invalid or expired refresh token');
+    };
+    
     const user = await this.db.user.findUnique({ where: { nomorInduk: decoded.nomorInduk }});
     if (!user) throw new NotFound('Nomor Induk not registered');
 
