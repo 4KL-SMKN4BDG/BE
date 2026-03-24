@@ -225,7 +225,7 @@ class BaseService {
     let pagination: Record<string, any> = {};
 
     if (query && query.limit && query.limit > 0) {
-      if (query.paginate) pagination['take'] = query.limit;
+      if (query.paginate) pagination['take'] = Number(query.limit);
     }
 
     if (query && query.paginate) {
