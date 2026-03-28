@@ -1,6 +1,7 @@
 import BaseService from "../../base/service.base.ts";
 import prisma from '../../config/prisma.db.ts';
 import { Forbidden } from "../../exceptions/catch.exception.ts";
+import { convertGmapsUrl } from "../../helpers/convertGmapsURL.helper.ts";
 
 interface Payload {
   [key: string]: any;
@@ -49,6 +50,7 @@ class CompanyService extends BaseService {
         capacity: payload.capacity[i],
         logo: ''
       };
+      if (companyData.address) companyData.address = await convertGmapsUrl(companyData.address)
       if (files && files.logo && files.logo[i]) companyData.logo = files.logo[i].path.replace(/\\/g, '/');
       dataArray.push(companyData);
     };
