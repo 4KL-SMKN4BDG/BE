@@ -17,7 +17,7 @@ class CompanyService extends BaseService {
       //  include: { users: { omit: { password: true }, include: { roles: true } } } 
       });
     data.map((company: any) => {
-      company.logo = company.logo ? `https://localhost:3000/${company.logo}` : null;
+      company.logo = company.logo ? `${process.env.BE_BASE_URL}/api/download?path=${company.logo}` : null;
       // company.teachers = company.users.filter((user: any) => user.roles[0].code === "TEACHER");
       // company.students = company.users.filter((user: any) => user.roles[0].code === "STUDENT");
       // delete company.users;
@@ -31,7 +31,7 @@ class CompanyService extends BaseService {
 
   findById = async (id: any) => {
     const data: any = await this.db.company.findUnique({ where: { id }, include: { users: { omit: { password: true } } } });
-      data.logo = data.logo ? `https://localhost:3000/${data.logo}` : null;
+      data.logo = data.logo ? `${process.env.BE_BASE_URL}/api/download?path=${data.logo}` : null;
       data.teachers = data.users.filter((user: any) => user.roles.code === "TEACHER");
       data.students = data.users.filter((user: any) => user.roles.code === "STUDENT");
       delete data.users;

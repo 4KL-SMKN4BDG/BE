@@ -16,7 +16,7 @@ class UserService extends BaseService {
     const q: { [key: string]: any } = this.transformBrowseQuery(query);
     const data = await this.db.user.findMany({ ...q as {[key: string]: never}, include: { roles: true, company: true }, omit: { password: true } });
     data.map((user: any) => {
-      user.profilePhoto = user.profilePhoto ? `https://localhost:3000/${user.profilePhoto}` : null;
+      user.profilePhoto = user.profilePhoto ? `${process.env.BE_BASE_URL}/api/download?path=${user.profilePhoto}` : null;
     })
 
     if (query.paginate) {
@@ -28,7 +28,7 @@ class UserService extends BaseService {
 
   findById = async (id: any) => {
     const data = await this.db.user.findUnique({ where: { id }, include: { roles: true, company: true}, omit: { password: true } });
-    if (data) data.profilePhoto = data.profilePhoto ? `https://localhost:3000/${data.profilePhoto}` : null;
+    if (data) data.profilePhoto = data.profilePhoto ? `${process.env.BE_BASE_URL}/api/download?path=${data.profilePhoto}` : null;
     return data;
   };
 
