@@ -31,10 +31,10 @@ class CompanyService extends BaseService {
   };
 
   findById = async (id: any) => {
-    const data: any = await this.db.company.findUnique({ where: { id }, include: { users: { omit: { password: true } } } });
+    const data: any = await this.db.company.findUnique({ where: { id }, include: { users: { include: { roles: true },omit: { password: true } } } });
       data.logo = data.logo ? `${process.env.BE_BASE_URL}/api/download?path=${data.logo}` : null;
-      data.teachers = data.users.filter((user: any) => user.roles.code === "TEACHER");
-      data.students = data.users.filter((user: any) => user.roles.code === "STUDENT");
+      data.teachers = data.users.filter((user: any) => user.roles[0].code === "TEACHER");
+      data.students = data.users.filter((user: any) => user.roles[0].code === "STUDENT");
       delete data.users;
     return data;
   };
@@ -73,7 +73,8 @@ class CompanyService extends BaseService {
   };
 
   apply = async (user: any, companyId: any) => {
-    if (user.company) throw new Forbidden('User already has a company');
+    console.log(user);
+    if (user.companyId) throw new Forbidden('User already has a company');
     const data = await this.db.user.update({
         where: { id: user.id },
         data: {
