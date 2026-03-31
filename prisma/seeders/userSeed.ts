@@ -8,7 +8,7 @@ export async function UserSeed(adminRole: Role, studentRole: Role, teacherRole: 
             where: { email: "admin@smkn4.com" },
             update: {},
             create: {
-                name: "Zico Oktorachman",
+                name: "ZICO OKTORACHMAN",
                 nomorInduk: "1234512345",
                 email: "admin@smkn4.com",
                 password: await hashPassword("password123"),
@@ -21,32 +21,26 @@ export async function UserSeed(adminRole: Role, studentRole: Role, teacherRole: 
             where: { email: "student@smkn4.com" },
             update: {},
             create: {
-                name: "Wandra Danurwenda",
+                name: "WANDRA DANURWENDA",
                 nomorInduk: "2324120105",
                 email: "student@smkn4.com",
                 password: await hashPassword("password123"),
                 roles: {
                     connect: { id: studentRole.id }
                 },
-                // company: {
-                //     connect: { id: company1.id }
-                // }
             }
         });
         const teacher1 = await prisma.user.upsert({
             where: { email: "teacher@smkn4.com" },
             update: {},
             create: {
-                name: "Ilham Zafir",
-                nomorInduk: "12345678",
+                name: "ILHAM ZAFIR",
+                nomorInduk: "123123",
                 email: "teacher@smkn4.com",
                 password: await hashPassword("password123"),
                 roles: {
                     connect: { id: teacherRole.id }
                 },
-                // company: {
-                //     connect: { id: company1.id }
-                // }
             }
         });
         return { admin1, student1 };
