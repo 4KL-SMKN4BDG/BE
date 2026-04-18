@@ -75,6 +75,7 @@ class CompanyService extends BaseService {
   apply = async (user: any, companyId: any) => {
     console.log(user);
     if (user.companyId) throw new Forbidden('User already has a company');
+    if (user.roles[0].code === "TEACHER" || user.roles[0].code === "ADMIN") throw new Forbidden('Only student can apply to a company');
     const data = await this.db.user.update({
         where: { id: user.id },
         data: {
@@ -86,10 +87,12 @@ class CompanyService extends BaseService {
   };
 
   response = async (user: any, payload: any) => {
+    if (payload.status === "REJECTED") payload.disconnect = true
     const data = await this.db.user.update({
       where: { id: payload.userId },
       data: {
-        status: payload.status
+        status: payload.status,
+        company: { disconnect: payload.disconnect }
       }
     });
     return data;
