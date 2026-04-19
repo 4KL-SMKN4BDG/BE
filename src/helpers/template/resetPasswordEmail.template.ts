@@ -1,4 +1,6 @@
-export const resetPasswordEmailTemplate = (name: string, resetLink: string) => `
+export const resetPasswordEmailTemplate = (name: string = "Siswa SMKN 4 Bandung", resetLink: string) => {
+   
+return `
 <!DOCTYPE html>
 <html>
 <head>
@@ -104,4 +106,4 @@ If you didn’t request a password reset, you can safely ignore this email.
 
 </body>
 </html>
-`;
+`};
