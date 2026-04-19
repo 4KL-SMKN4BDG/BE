@@ -47,10 +47,11 @@ class CompanyService extends BaseService {
         description: payload.description[i],
         // rencana selanjutnya: untuk https dari google maps gak perlu dimasukan ke database
         address: payload.address[i],
+        maps: payload.maps[i],
         capacity: payload.capacity[i],
         logo: ''
       };
-      if (companyData.address) companyData.address = await convertGmapsUrl(companyData.address)
+      if (companyData.maps) companyData.maps = await convertGmapsUrl(companyData.maps)
       if (files && files.logo && files.logo[i]) companyData.logo = files.logo[i].path.replace(/\\/g, '/');
       dataArray.push(companyData);
     };
@@ -62,6 +63,7 @@ class CompanyService extends BaseService {
     update = async (id: any, payload: Payload, files: any) => {
     const oldLogo = await this.db.company.findUnique({ where: { id }, select: { logo: true } });
     if (files && files.logo && files.logo[0]) payload.logo = files.logo[0].path.replace(/\\/g, '/');
+    if (payload.maps) payload.maps = await convertGmapsUrl(payload.maps);
     const data = await this.db.company.update({ where: { id }, data: payload });
     if (payload.logo && oldLogo && oldLogo.logo) this.deleteUpload(oldLogo.logo);
     return data;

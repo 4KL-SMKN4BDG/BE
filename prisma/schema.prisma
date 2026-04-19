@@ -58,6 +58,7 @@ model Company {
   name             String   @unique
   description      String?
   address          String?
+  maps             String?
   logo             String?
   capacity         Int
      
