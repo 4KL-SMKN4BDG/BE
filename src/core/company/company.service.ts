@@ -86,15 +86,18 @@ class CompanyService extends BaseService {
     return data;
   };
 
-  response = async (user: any, payload: any) => {
+  response = async (payload: any) => {
+    const data = await this.db.user.findUnique({ where: { id: payload.userId }, include: { company: true } });
     if (payload.status === "REJECTED") payload.disconnect = true
-    const data = await this.db.user.update({
+    await this.db.user.update({
       where: { id: payload.userId },
       data: {
         status: payload.status,
         company: { disconnect: payload.disconnect }
       }
     });
+    const html = applicationResponseEmailTemplate(data?.name || "Siswa SMKN 4 Bandung", data?.company?.name || "Tempat PKL anda", payload.status);
+    await sendEmail(data?.email || '', "Hasil Pengajuan PKL", html);
     return data;
   };
 

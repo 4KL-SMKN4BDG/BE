@@ -44,7 +44,7 @@ class CompanyController extends BaseController {
   });
 
   response = this.wrapper(async (req: Request, res: Response) => {
-    const data = await this.#service.response(req.user, req.body);
+    const data = await this.#service.response(req.body);
     return this.ok(res, data, `Application ${req.body.respone}` )
   });
 
